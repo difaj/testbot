@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Telegram Mini App - 4 Buttons</title>
+<title>Telegram Mini App</title>
 <script src="https://a-tgme.stel.com/js/telegram-web-app-beta.js?87"></script>
 <style>
 body {
@@ -41,7 +41,7 @@ button {
 </head>
 <body>
 <div class="card">
-  <h2>Mini App 4 Buttons</h2>
+  <h2>Mini App</h2>
   <p id="user-info">Loading user...</p>
   <button onclick="closeApp()">Close WebView</button>
 </div>
@@ -56,18 +56,16 @@ const user = tg.initDataUnsafe?.user;
 document.getElementById("user-info").innerText =
   user ? `Hello, ${user.first_name}!` : "Open inside Telegram";
 
-// Emoji IDs
-const BUTTON1_ICON = "5003548389153964033"; // Button 1
-const BUTTON2_ICON = "5003527073231273985"; // Button 2
-const BUTTON3_ICON = "5384289161110880257"; // Button 3
-const BUTTON4_ICON = "5384497819212054529"; // Button 4
+// 🔥 Replace with your real custom emoji IDs
+const MAIN_ICON = "5368324170671202286";       // Button 1 emoji ID
+const SECONDARY_ICON = "5368324170671202287";  // Button 2 emoji ID
 
-// Create four buttons
+// Set up buttons with fixed emoji
 tg.MainButton.setParams({
   text: "Button 1",
   is_visible: true,
   is_active: true,
-  icon_custom_emoji_id: BUTTON1_ICON
+  icon_custom_emoji_id: MAIN_ICON
 });
 tg.MainButton.show();
 
@@ -75,33 +73,26 @@ tg.SecondaryButton.setParams({
   text: "Button 2",
   is_visible: true,
   is_active: true,
-  icon_custom_emoji_id: BUTTON2_ICON
+  icon_custom_emoji_id: SECONDARY_ICON
 });
 tg.SecondaryButton.show();
 
-// Для додаткових кнопок використовуємо WebApp API createButton
-// Якщо Telegram WebApp підтримує ще дві кнопки через setParams
-const BUTTON3 = tg.createButton?.({
-  text: "Button 3",
-  is_visible: true,
-  is_active: true,
-  icon_custom_emoji_id: BUTTON3_ICON
+// Handle clicks
+tg.MainButton.onClick(() => {
+  tg.showPopup({
+    message: "Button 1 pressed",
+    buttons: [{ type: "ok" }]
+  });
 });
 
-const BUTTON4 = tg.createButton?.({
-  text: "Button 4",
-  is_visible: true,
-  is_active: true,
-  icon_custom_emoji_id: BUTTON4_ICON
+tg.SecondaryButton.onClick(() => {
+  tg.showPopup({
+    message: "Button 2 pressed",
+    buttons: [{ type: "ok" }]
+  });
 });
 
-// Обробка натискань
-tg.MainButton.onClick(() => tg.showPopup({ message: "Button 1 pressed", buttons: [{ type: "ok" }] }));
-tg.SecondaryButton.onClick(() => tg.showPopup({ message: "Button 2 pressed", buttons: [{ type: "ok" }] }));
-
-BUTTON3?.onClick(() => tg.showPopup({ message: "Button 3 pressed", buttons: [{ type: "ok" }] }));
-BUTTON4?.onClick(() => tg.showPopup({ message: "Button 4 pressed", buttons: [{ type: "ok" }] }));
-
+// Close WebView
 function closeApp() {
   tg.close();
 }
