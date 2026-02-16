@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Telegram Mini App Demo</title>
+<script src="https://a-telegram.stel.com/js/telegram-web-app.js"></script>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--tg-theme-bg-color, #ffffff);
+  color: var(--tg-theme-text-color, #000000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  background: var(--tg-theme-secondary-bg-color, #f2f2f2);
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  width: 320px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: var(--tg-theme-button-color, #2481cc);
+  color: var(--tg-theme-button-text-color, #ffffff);
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+<div class="card">
+  <h2>Mini App Demo</h2>
+  <p id="user-info"></p>
+  <button onclick="toggleIcons()">Toggle Button Icons</button>
+  <button onclick="closeApp()">Close WebView</button>
+</div>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+
+const user = tg.initDataUnsafe?.user;
+
+document.getElementById("user-info").innerText =
+  user ? `Hello, ${user.first_name}` : "Open inside Telegram";
+
+let iconsEnabled = true;
+
+// Replace with your own custom emoji IDs
+const MAIN_ICON = "5465665476971471368";
+const SECONDARY_ICON = "5222108309795908493";
+
+function setupButtons() {
+  tg.MainButton.setParams({
+    text: "Main Action",
+    is_visible: true,
+    is_active: true,
+    icon_custom_emoji_id: iconsEnabled ? MAIN_ICON : ""
+  });
+
+  tg.SecondaryButton.setParams({
+    text: "Secondary Action",
+    is_visible: true,
+    is_active: true,
+    icon_custom_emoji_id: iconsEnabled ? SECONDARY_ICON : ""
+  });
+
+  tg.MainButton.show();
+  tg.SecondaryButton.show();
+}
+
+function toggleIcons() {
+  iconsEnabled = !iconsEnabled;
+  setupButtons();
+}
+
+function closeApp() {
+  tg.close();
+}
+
+tg.MainButton.onClick(() => {
+  tg.showAlert("Main button pressed");
+});
+
+tg.SecondaryButton.onClick(() => {
+  tg.showAlert("Secondary button pressed");
+});
+
+// Initial setup
+setupButtons();
+</script>
+
+</body>
+</html>
