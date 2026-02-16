@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Telegram Mini App</title>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram Mini App Emoji Demo</title>
 <script src="https://a-tgme.stel.com/js/telegram-web-app-beta.js?87"></script>
-
 <style>
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: Arial, sans-serif;
   background: var(--tg-theme-bg-color, #ffffff);
   color: var(--tg-theme-text-color, #000000);
   display: flex;
@@ -19,7 +17,7 @@ body {
   height: 100vh;
 }
 
-.container {
+.card {
   width: 320px;
   padding: 20px;
   border-radius: 16px;
@@ -41,55 +39,43 @@ button {
 }
 </style>
 </head>
-
 <body>
-<div class="container">
-  <h2>Mini App</h2>
-  <p id="user-info">Loading...</p>
-  <button onclick="toggleIcons()">Toggle Button Icons</button>
+<div class="card">
+  <h2>Mini App Emoji Demo</h2>
+  <p id="user-info">Loading user...</p>
+  <button onclick="toggleIcons()">Toggle Button Emojis</button>
   <button onclick="closeApp()">Close WebView</button>
 </div>
 
 <script>
 const tg = window.Telegram.WebApp;
-
-if (!tg) {
-  alert("Open this Mini App inside Telegram");
-}
-
 tg.ready();
 tg.expand();
-
-// Debug info (можеш прибрати)
-console.log("Telegram version:", tg.version);
-console.log("Platform:", tg.platform);
 
 // User info
 const user = tg.initDataUnsafe?.user;
 document.getElementById("user-info").innerText =
-  user ? `Hello, ${user.first_name}` : "Opened outside Telegram";
+  user ? `Hello, ${user.first_name}!` : "Open inside Telegram";
 
-// 🔥 ЗАМІНИ НА СВОЇ РЕАЛЬНІ custom_emoji_id
-const MAIN_ICON = "5003548389153964033";
-const SECONDARY_ICON = "5003527073231273985";
-
+// Toggle state
 let iconsEnabled = true;
 
-function setupButtons() {
+// 🔥 Replace with your real custom emoji IDs
+const MAIN_ICON = "5003548389153964033";       // Main button emoji ID
+const SECONDARY_ICON = "5003527073231273985";  // Secondary button emoji ID
 
+function setupButtons() {
   tg.MainButton.setParams({
-    text: "Main Action",
-    is_active: true,
+    text: "Buy",
     is_visible: true,
-    is_progress_visible: false,
+    is_active: true,
     icon_custom_emoji_id: iconsEnabled ? MAIN_ICON : undefined
   });
 
   tg.SecondaryButton.setParams({
-    text: "Secondary Action",
-    is_active: true,
+    text: "Do Something",
     is_visible: true,
-    is_progress_visible: false,
+    is_active: true,
     icon_custom_emoji_id: iconsEnabled ? SECONDARY_ICON : undefined
   });
 
@@ -97,15 +83,18 @@ function setupButtons() {
   tg.SecondaryButton.show();
 }
 
+// Toggle emojis on/off
 function toggleIcons() {
   iconsEnabled = !iconsEnabled;
   setupButtons();
 }
 
+// Close WebView
 function closeApp() {
   tg.close();
 }
 
+// Handle button clicks
 tg.MainButton.onClick(() => {
   tg.showPopup({
     message: "Main button pressed",
@@ -123,6 +112,5 @@ tg.SecondaryButton.onClick(() => {
 // Initial render
 setupButtons();
 </script>
-
 </body>
 </html>
