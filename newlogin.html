@@ -3,12 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Telegram WebApp Login</title>
+  <title>Telegram Login Test</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      margin-top: 100px;
+      padding-top: 100px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      color: #0088cc;
     }
     #user-info {
       margin-top: 20px;
@@ -18,10 +22,10 @@
   </style>
 </head>
 <body>
-  <h1>Вхід через Telegram</h1>
+  <h1>Тест Telegram Login</h1>
 
-  <!-- Кнопка авторизації Telegram -->
-  <script async src="https://a-tgme.stel.com/js/telegram-widget.js?22"
+  <!-- Telegram Login Widget -->
+  <script async src="https://y-tgme.stel.com/js/telegram-widget.js?22"
           data-telegram-login="nftshop_bot"
           data-size="large"
           data-onauth="onTelegramAuth(user)"
@@ -32,11 +36,10 @@
 
   <script type="text/javascript">
     function onTelegramAuth(user) {
-      // Виводимо повідомлення
       alert('Logged in as ' + user.first_name + ' ' + user.last_name +
             ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');
 
-      // А також показуємо на сторінці
+      // Показуємо інформацію на сторінці
       const infoDiv = document.getElementById('user-info');
       infoDiv.innerHTML = `
         <p>Привіт, <strong>${user.first_name} ${user.last_name}</strong>!</p>
