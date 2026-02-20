@@ -25,8 +25,8 @@
   <h1>Тест Telegram Login</h1>
 
   <!-- Telegram Login Widget -->
-  <script async src="https://y-telegram.stel.com/js/telegram-widget.js?22"
-          data-telegram-login="nftshop_bot"
+  <script async src="https://telegram.org/js/telegram-widget.js?22"
+          data-telegram-login="nftshop_bot"   <!-- заміни на свого бота -->
           data-size="large"
           data-onauth="onTelegramAuth(user)"
           data-request-access="write">
@@ -34,12 +34,13 @@
 
   <div id="user-info"></div>
 
-  <script type="text/javascript">
+  <script>
     function onTelegramAuth(user) {
+      // alert з даними
       alert('Logged in as ' + user.first_name + ' ' + user.last_name +
             ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');
 
-      // Показуємо інформацію на сторінці
+      // показуємо дані на сторінці
       const infoDiv = document.getElementById('user-info');
       infoDiv.innerHTML = `
         <p>Привіт, <strong>${user.first_name} ${user.last_name}</strong>!</p>
