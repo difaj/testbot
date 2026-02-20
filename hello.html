@@ -1,5 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telegram Mini App</title>
+<script src="https://tgme.stel.com/js/telegram-web-app-beta.js?87"></script>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--tg-theme-bg-color, #ffffff);
+  color: var(--tg-theme-text-color, #000000);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.card {
+  width: 320px;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--tg-theme-secondary-bg-color, #f2f2f2);
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  background: var(--tg-theme-button-color, #2481cc);
+  color: var(--tg-theme-button-text-color, #ffffff);
+}
+</style>
+</head>
+
+<body>
+<div class="card">
+  <h2>Mini App</h2>
+  <p id="user-info">Loading user...</p>
+  <button onclick="toggleMode()">Toggle Emoji Mode</button>
+  <button onclick="closeApp()">Close WebView</button>
+</div>
+
 <script>
-const tg = window.Telegram.WebApp;
+const tg = window.Telegram?.WebApp;
+
+if (!tg) {
+  document.body.innerHTML = "Open inside Telegram";
+  throw new Error("Telegram WebApp not found");
+}
+
 tg.ready();
 tg.expand();
 
@@ -7,43 +64,78 @@ const user = tg.initDataUnsafe?.user;
 document.getElementById("user-info").innerText =
   user ? `Hello, ${user.first_name}!` : "Open inside Telegram";
 
-// ID кастомних емоджі (10–20 цифр)
-const MAIN_ICON = "5368324170671202286";
-const SECONDARY_ICON = "5368324170671202287";
+// 🔥 Custom Premium Emoji ID (10–20 цифр)
+const EMOJI_ID = "5368324170671202286";
 
-// ===== MAIN BUTTON =====
-tg.MainButton.setParams({
-  text: "Button 1",
-  icon_custom_emoji_id: MAIN_ICON,
-  is_active: true
-});
-tg.MainButton.show();
+let emojiMode = false; // false = тільки емоджі, true = текст + емоджі
 
-// ===== SECONDARY BUTTON =====
-tg.SecondaryButton.setParams({
-  text: "Button 2",
-  icon_custom_emoji_id: SECONDARY_ICON,
-  is_active: true,
-  position: "bottom" // можна left/right/top/bottom
-});
-tg.SecondaryButton.show();
+function updateButtons() {
 
-// Click handlers
+  if (!emojiMode) {
+    // ===== Режим 1 — тільки емоджі =====
+    tg.MainButton.setParams({
+      text: " ", // пробіл щоб Telegram не кинув помилку
+      icon_custom_emoji_id: EMOJI_ID,
+      is_active: true
+    });
+
+    if (tg.SecondaryButton) {
+      tg.SecondaryButton.setParams({
+        text: " ",
+        icon_custom_emoji_id: EMOJI_ID,
+        is_active: true
+      });
+      tg.SecondaryButton.show();
+    }
+
+  } else {
+    // ===== Режим 2 — текст + емоджі =====
+    tg.MainButton.setParams({
+      text: "Button 1",
+      icon_custom_emoji_id: EMOJI_ID,
+      is_active: true
+    });
+
+    if (tg.SecondaryButton) {
+      tg.SecondaryButton.setParams({
+        text: "Button 2",
+        icon_custom_emoji_id: EMOJI_ID,
+        is_active: true
+      });
+      tg.SecondaryButton.show();
+    }
+  }
+
+  tg.MainButton.show();
+}
+
+updateButtons();
+
+function toggleMode() {
+  emojiMode = !emojiMode;
+  updateButtons();
+}
+
+// Натискання на кнопки Telegram
 tg.MainButton.onClick(() => {
   tg.showPopup({
-    message: "Button 1 pressed",
+    message: "Main button pressed",
     buttons: [{ type: "ok" }]
   });
 });
 
-tg.SecondaryButton.onClick(() => {
-  tg.showPopup({
-    message: "Button 2 pressed",
-    buttons: [{ type: "ok" }]
+if (tg.SecondaryButton) {
+  tg.SecondaryButton.onClick(() => {
+    tg.showPopup({
+      message: "Secondary button pressed",
+      buttons: [{ type: "ok" }]
+    });
   });
-});
+}
 
 function closeApp() {
   tg.close();
 }
 </script>
+</body>
+</html>
